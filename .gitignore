@@ -1,0 +1,6 @@
+Util.vcxproj
+Util.vcxproj.filters
+Util.vcxproj.user
+mnist_test.dat
+mnist_train.dat
+x64/

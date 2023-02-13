@@ -1,9 +1,10 @@
 #ifndef FILE_UTIL_H
 #define FILE_UTIL_H
+#include<iostream>
 #include<vector>
 #include<fstream>
 #include<string>
-#include <direct.h>
+#include<direct.h>
 
 using std::vector;
 using std::ofstream;
@@ -27,9 +28,6 @@ inline vector<char> vecToRawBytes(const vector<T>& vec) {
 	memcpy(bytes.data(), vec.data(), numBytes);
 	return bytes;
 }
-
-
-
 
 
 // convert between a data type and a buffer of bytes
@@ -56,7 +54,6 @@ union ObjectBuffer {
 };
 
 
-
 template<typename T>
 inline void copyData(char* dst, const char* src) {
 	memcpy(dst, src, sizeof(T));
@@ -77,7 +74,6 @@ inline T readBytesFromFile(ifstream& fin) {
 }
 
 
-
 // this function writes the contents of a vector to a file
 // the vector should be of primitive types or structs with no pointer members
 template<typename T>
@@ -88,7 +84,6 @@ inline bool writeVectorDataToFile(ofstream& fout, const vector<T>& vec) {
 	}
 	return false;
 }
-
 
 
 template<typename T>
@@ -104,7 +99,6 @@ inline vector<T> readVectorDataFromFile(ifstream& fin, size_t size) {
 }
 
 
-
 template<typename T>
 inline bool writeVectorDataToFile(const string& fileName, const vector<T>& vec) {
 	ofstream fout;
@@ -115,8 +109,6 @@ inline bool writeVectorDataToFile(const string& fileName, const vector<T>& vec) 
 	}
 	return success;
 }
-
-
 
 
 template<typename T>
@@ -131,8 +123,6 @@ inline vector<T> readVectorDataFromFile(const string& fileName, size_t size) {
 }
 
 
-
-
 template<typename T>
 inline bool writeVectorSeriesToFile(ofstream& fout, const vector<vector<T>>& vecs) {
 	for (size_t i = 0; i < vecs.size(); i++) {
@@ -142,8 +132,6 @@ inline bool writeVectorSeriesToFile(ofstream& fout, const vector<vector<T>>& vec
 	}
 	return true;
 }
-
-
 
 
 template<typename T>
@@ -184,8 +172,6 @@ inline vector<int> convert(const vector<char>& charVec) {
 	}
 	return intVec;
 }
-
-
 
 
 // read file, output string that contains all file contents
@@ -233,6 +219,7 @@ inline vector<T> slurp(const string& fname) {
 	return vector<T>();
 }
 
+
 template<typename T>
 inline void dump(const string& fname, const vector<T>& buffer) {
 	ofstream fout;
@@ -261,9 +248,53 @@ inline void dump(const string& fname, const string& buffer) {
 }
 
 
-
 inline string getBaseFilename(const string& fpath) {
 	return fpath.substr(fpath.find_last_of("/\\") + 1);
+}
+
+
+vector<vector<string>> readCsv(const string& fname) {
+	vector<vector<string>> csvData;
+
+	std::ifstream fin;
+	fin.open(fname);
+
+	if (fin.is_open()) {
+		string line;
+		string column = "";
+		bool isInQuotes = false;
+
+		while (getline(fin, line)) {
+
+			vector<string> thisLine;
+
+			for (size_t i = 0; i < line.size(); i++) {
+				char c = line[i];
+
+				if (c == '\"') {
+					isInQuotes = !isInQuotes;
+				}
+
+				if (c != ',' || isInQuotes) {
+					column += c;
+				}
+				else {
+					thisLine.push_back(column);
+					column = "";
+				}
+			}
+
+			thisLine.push_back(column);
+			column = "";
+
+			csvData.push_back(thisLine);
+		}
+	}
+	else {
+		std::cout << "File failed to open.\n";
+	}
+
+	return csvData;
 }
 
 #endif // !FILE_UTIL_H

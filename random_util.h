@@ -37,6 +37,10 @@ public:
 		}
 	}
 
+	static uint64_t randInt() {
+		return instance->gen();
+	}
+
 	static uint64_t randInt(const uint64_t ceil_) {
 		return instance->gen() % ceil_;
 	}

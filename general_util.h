@@ -6,10 +6,6 @@
 #include<vector>
 
 
-inline void srand() {
-	srand((unsigned)time(NULL));
-}
-
 
 inline void consolePause() {
 	std::cout << "\nPress enter to continue...";

@@ -25,6 +25,20 @@ private:
 		gen.seed(seeds);
 	}
 
+	template<typename T>
+	static void swap(T* arr, const size_t i1, const size_t i2) {
+		const T temp = arr[i1];
+		arr[i1] = arr[i2];
+		arr[i2] = temp;
+	}
+
+	template<typename T>
+	static void swap(vector<T>& vec, const size_t i1, const size_t i2) {
+		const T temp = vec[i1];
+		vec[i1] = vec[i2];
+		vec[i2] = temp;
+	}
+
 public:
 
 	static void init() {
@@ -61,14 +75,18 @@ public:
 		return instance->normalDist(instance->gen);
 	}
 
+	// the Fisher–Yates shuffle
 	template<typename T>
-	static void shuffle(std::vector<T>& vec) {
-		std::shuffle(vec.begin(), vec.end(), instance->gen);
+	static void shuffle(T* arr, const uint64_t size) {
+		for (size_t i = size - 1; i > 0; i--) {
+			size_t r = instance->gen() % (i + 1);
+			swap(arr, i, r);
+		}
 	}
 
 	template<typename T>
-	static void shuffle(std::list<T>& ls) {
-		std::shuffle(ls.begin(), ls.end(), instance->gen);
+	static void shuffle(std::vector<T>& vec) {
+		shuffle(vec.data(), vec.size());
 	}
 
 	static void shuffle(std::string& str) {
@@ -121,6 +139,5 @@ public:
 	}
 
 };
-
 
 #endif // !RANDOM_UTIL_H

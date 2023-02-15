@@ -2,14 +2,15 @@
 #include<vector>
 #include<fstream>
 #include<string>
+#include"general_util.h"
+
 
 using namespace std;
 
 
 int main() {
 
-	cout << "Press enter to continue...\n";
-	cin.get();
-	cout << "\n";
+
+	consolePause();
 	return 0;
 }

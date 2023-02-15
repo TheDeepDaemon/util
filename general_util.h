@@ -6,10 +6,10 @@
 #include<vector>
 
 
-
 inline void consolePause() {
-	std::cout << "\nPress enter to continue...";
+	std::cout << "\n\nPress enter to continue...";
 	std::cin.get();
+	std::cout << std::endl;
 }
 
 

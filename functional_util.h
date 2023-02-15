@@ -2,7 +2,7 @@
 #define FUNCTIONAL_UTIL_H
 #include<vector>
 #include<algorithm>
-#include<random>
+#include"random_util.h"
 
 
 // return vin after transforming it using mapping
@@ -106,9 +106,7 @@ inline std::vector<T> getPermutationVector(const uint64_t size) {
 
 inline std::vector<uint64_t> getRandomPermutation(uint64_t size) {
 	std::vector<uint64_t> permutation = getPermutationVector(size);
-	std::random_device rd;
-	std::mt19937_64 gen(rd());
-	std::shuffle(permutation.begin(), permutation.end(), gen);
+	Random::shuffle(permutation);
 	return permutation;
 }
 

@@ -78,9 +78,11 @@ public:
 	// the Fisher–Yates shuffle
 	template<typename T>
 	static void shuffle(T* arr, const uint64_t size) {
-		for (size_t i = size - 1; i > 0; i--) {
-			size_t r = instance->gen() % (i + 1);
-			swap(arr, i, r);
+		if (size > 0) {
+			for (size_t i = size - 1; i > 0; i--) {
+				size_t r = instance->gen() % (i + 1);
+				swap(arr, i, r);
+			}
 		}
 	}
 
@@ -94,22 +96,43 @@ public:
 	}
 
 	template<typename T>
-	static std::vector<T> randVec(const size_t size, const uint64_t floor_, const uint64_t ceil_) {
+	static std::vector<T> randIntVec(const size_t size, const uint64_t floor_, const uint64_t ceil_) {
 		_ASSERT(ceil_ > floor_);
 		std::vector<T> vec;
 		vec.reserve(size);
 		for (size_t i = 0; i < size; i++) {
-			vec.emplace_back(T(floor_ + randInt(ceil_ - floor_)));
+			vec.emplace_back(T(randInt(floor_, ceil_)));
 		}
 	}
 
 	template<typename T>
-	static std::vector<T> randVec(const size_t size, const uint64_t ceil_) {
+	static std::vector<T> randIntVec(const size_t size, const uint64_t ceil_) {
 		std::vector<T> vec;
 		vec.reserve(size);
 		for (size_t i = 0; i < size; i++) {
 			vec.emplace_back(T(randInt(ceil_)));
 		}
+		return vec;
+	}
+
+	template<typename T>
+	static std::vector<T> randFloatVec(const size_t size, const double ceil_) {
+		std::vector<T> vec;
+		vec.reserve(size);
+		for (size_t i = 0; i < size; i++) {
+			vec.emplace_back(T(randDouble() * ceil_));
+		}
+		return vec;
+	}
+
+	template<typename T>
+	static std::vector<T> randFloatVec(const size_t size, const double floor_, const double ceil_) {
+		std::vector<T> vec;
+		vec.reserve(size);
+		for (size_t i = 0; i < size; i++) {
+			vec.emplace_back(T(randDouble(floor_, ceil_)));
+		}
+		return vec;
 	}
 
 	template<typename T>
